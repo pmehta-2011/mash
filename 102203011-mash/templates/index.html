@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Singer Mashup Generator</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Poppins', sans-serif; /* Modern font */
+            background: linear-gradient(135deg, #e0f7fa, #80deea); /* Smooth gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container styling */
+        .container {
+            background: #ffffff; /* White card */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 360px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #004d40; 
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 14px;
+            font-weight: bold; 
+            color: #00695c; 
+        }
+
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 6px rgba(0, 150, 136, 0.5); /* Teal glow */
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #004d40, #00796b); /* Button gradient */
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease-in-out, transform 0.2s;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #00251a, #004d40); /* Darker gradient */
+            transform: scale(1.02); /* Slight zoom */
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #004d40; /* Dark teal for success */
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Singer Mashup Generator</h1>
+        <form id="mashupForm">
+            <label for="singerName">Singer's Name</label>
+            <input type="text" id="singerName" name="singerName" placeholder="Enter singer's name" required>
+
+            <label for="numVideos">Number of Videos (1-10)</label>
+            <input type="number" id="numVideos" name="numVideos" placeholder="Choose between 1 and 10" min="1" max="10" required>
+
+            <label for="trimDuration">Trim Duration (10-30 seconds)</label>
+            <input type="number" id="trimDuration" name="trimDuration" placeholder="Between 10 and 30 seconds" min="10" max="30" required>
+
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <button type="submit">Generate Mashup</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        document.getElementById('mashupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const message = document.getElementById('message');
+            message.textContent = 'Generating mashup... Please wait!';
+
+            const formData = new FormData(this);
+            fetch('/generate_mashup', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                message.textContent = data.message;
+            })
+            .catch(error => {
+                message.textContent = 'Error: ' + error.message;
+            });
+        });
+    </script>
+</body>
+</html>
